@@ -1,9 +1,14 @@
 const db = require("./db.js");
 
 module.exports = {
-  get
+  get,
+  getById
 };
 
 function get() {
-  return db("cohorts");
+  return db.select().from("cohorts");
+}
+
+function getById(id) {
+  return db("cohorts").where("id", id);
 }
