@@ -24,4 +24,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/:id/students", async (req, res) => {
+  try {
+    const students = await db.getStudentsOfCohort(req.params.id);
+    res.status(200).json(students);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
