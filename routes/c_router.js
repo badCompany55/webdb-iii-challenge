@@ -66,4 +66,19 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const idCheck = await db.getById(id);
+    if (idCheck.length > 0) {
+      const delCohort = await db.del(id);
+      res.status(200).json({ success: "Deletion Success" });
+    } else {
+      res.status(400).json({ Error: "The requested cohort does not exist" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
