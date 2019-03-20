@@ -3,7 +3,9 @@ const db = require("./db.js");
 module.exports = {
   get,
   getById,
-  getStudentsOfCohort
+  getStudentsOfCohort,
+  addCohort,
+  update
 };
 
 function get() {
@@ -19,4 +21,16 @@ function getStudentsOfCohort(id) {
     .select(["cohorts.name as Cohort", "students.name as Student"])
     .innerJoin("students", "cohorts.id", "students.cohort_id")
     .where("cohorts.id", id);
+}
+
+function addCohort(cohort) {
+  return db("cohorts").insert(cohort);
+}
+
+function update(theid, thecohort) {
+  console.log(thecohort);
+  console.log(theid);
+  return db("cohorts")
+    .where("id", theid)
+    .update(thecohort);
 }

@@ -27,7 +27,40 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/students", async (req, res) => {
   try {
     const students = await db.getStudentsOfCohort(req.params.id);
-    res.status(200).json(students);
+    students.length > 0
+      ? res.status(200).json(students)
+      : res.status(400).json({ Error: "The request cohort does not exist" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.post("/", async (req, res) => {
+  const cohort = req.body;
+  const { name } = req.body;
+  try {
+    if (name && name !== "") {
+      const newCohort = await db.addCohort(cohort);
+      res.status(200).json(newCohort);
+    } else {
+      res.status(400).json({ Error: "Name is required" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const cohort = req.body;
+  const { name } = req.body;
+  const { id } = req.params;
+  try {
+    if (name && name !== "") {
+      const upCohort = await db.update(id, cohort);
+      res.status(201).json(upCohort);
+    } else {
+      res.status(400).json({ Error: "Name is required" });
+    }
   } catch (err) {
     res.status(500).json(err);
   }
